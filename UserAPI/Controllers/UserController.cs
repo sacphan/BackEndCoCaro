@@ -1,18 +1,11 @@
-﻿using CoCaro.Data.Models;
-using CoCaro.Models;
-using CoCaro.Service.Token;
-using CoCaro.Services.Users;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AdminAPI.Controllers
+namespace UserAPI.Controllers
 {
-    [Authorize]
     public class UserController : Controller
     {
         private IUserService _IUserService;
@@ -32,17 +25,13 @@ namespace AdminAPI.Controllers
             var error = new ErrorObject(Error.SUCCESS);
             try
             {
-               
+
 
                 var result = _IUserService.Login(user.Username, user.Password);
                 if (result.Code == Error.SUCCESS.Code)
                 {
                     var token = _TokenService.CreateToken(result.GetData<User>());
-                    if (result.GetData<User>().Role == 1)
-                    {
-                        return Ok(error.SetData(token));
-                    }
-                    else return Ok(Error.FAILED);
+                    return Ok(error.SetData(token));
                 }
                 else
                 {
@@ -110,4 +99,5 @@ namespace AdminAPI.Controllers
             return Ok(error);
         }
     }
+}
 }
