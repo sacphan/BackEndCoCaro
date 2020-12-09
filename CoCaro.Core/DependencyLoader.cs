@@ -1,6 +1,10 @@
 
 
+using CoCaro.Service.Caching;
+using CoCaro.Service.Token;
+using CoCaro.Services.Users;
 using Microsoft.Extensions.DependencyInjection;
+
 using System;
 
 using System.Reflection;
@@ -16,20 +20,20 @@ namespace CoCaro.Core
         {
             try
             {
-                //serviceCollection.AddSingleton<ICacheService, MemoryCacheService>();
-                //serviceCollection.AddSingleton<ICacheKeyService, CacheKeyService>();
-                //serviceCollection.AddSingleton<Microsoft.Extensions.Caching.Memory.IMemoryCache, Microsoft.Extensions.Caching.Memory.MemoryCache>();
-               
+                serviceCollection.AddSingleton<ICacheService, MemoryCacheService>();
+                serviceCollection.AddSingleton<ICacheKeyService, CacheKeyService>();
+                serviceCollection.AddSingleton<Microsoft.Extensions.Caching.Memory.IMemoryCache, Microsoft.Extensions.Caching.Memory.MemoryCache>();
+
 
                 switch (Assembly.GetEntryAssembly()?.GetName().Name)
                 {
                   
-                    case "BoardManager_BackEnd":
+                    case "AdminAPI":
                      
-                        //serviceCollection.AddSingleton<ITokenService, TokenService>();
+                        serviceCollection.AddSingleton<ITokenService, TokenService>();
+
+                        serviceCollection.AddSingleton<IUserService, UserServices>();
                         //serviceCollection.AddSingleton<IWorkContext, ApiWorkContext>();
-                        //serviceCollection.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-                                         
                         break;
                 }
             }

@@ -1,4 +1,5 @@
 ﻿
+using CoCaro.Data.Models;
 using CoCaro.Models;
 
 
@@ -10,7 +11,7 @@ namespace CoCaro.Service.Token
 {
     public interface ITokenService
     {
-        //AuthToken CreateToken(UserProfile user);
+        AuthToken CreateToken(User user);
         AuthToken RefreshToken(string RefreshToken);
     }
 }
