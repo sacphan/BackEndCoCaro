@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CoCaro.Data.Models;
+using CoCaro.Models;
+using CoCaro.Service.Token;
+using CoCaro.Services.Users;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +59,6 @@ namespace UserAPI.Controllers
             var error = new ErrorObject(Error.SUCCESS);
             try
             {
-                //var userinfo = _Mapper.Map<UserInfo>(model);
                 error = _IUserService.CreateUser(user);
                 if (error.Code == Error.SUCCESS.Code)
                 {
@@ -98,6 +103,62 @@ namespace UserAPI.Controllers
             }
             return Ok(error);
         }
+        [Route("api/LoginFacebook")]
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult LoginFacebook([FromBody] LoginFacebook login)
+        {
+
+            //IActionResult response = Unauthorized();
+            var error = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                //var user = new User { FacebookId= login.FacebookId, Username = l}
+                //error = _IUserService.Login(user);
+                if (error.Code == Error.SUCCESS.Code)
+                {
+
+                    var token = _TokenService.CreateToken(error.GetData<User>());
+                    return Ok(error.SetData(token));
+                }
+                return Ok(error);
+            }
+            catch (Exception ex)
+            {
+                return Ok(error.System(ex));
+            }
+        }
+        [Route("api/LoginGoogle")]
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult LoginGoogle([FromBody] LoginGoogle login)
+        {
+
+            //IActionResult response = Unauthorized();
+            var error = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                //error = _IUserService.CreateUser(user);
+                //if (error.Code == Error.SUCCESS.Code)
+                {
+
+                    var token = _TokenService.CreateToken(error.GetData<User>());
+                    return Ok(error.SetData(token));
+                }
+                return Ok(error);
+            }
+            catch (Exception ex)
+            {
+                return Ok(error.System(ex));
+            }
+        }
+        [Route("api/GetUserOnline")]
+        [Authorize]
+        [HttpGet]
+        public IActionResult GetUserOnline()
+        {
+            return Ok(_IUserService.GetListUserOnline());
+        }
     }
 }
-}
+

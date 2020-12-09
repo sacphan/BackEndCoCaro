@@ -18,6 +18,7 @@ namespace CoCaro.Data.Models
         public string Password { get; set; }
         public int? GoogleId { get; set; }
         public int? FacebookId { get; set; }
-        public int? Role { get; set; }
+        public int? RoleId { get; set; }
+        public bool? IsOnline { get; set; }
     }
 }

@@ -4,5 +4,15 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CoCaro.Core\CoCaro.Core.csproj" />
+    <ProjectReference Include="..\CoCaro.Models\CoCaro.Models.csproj" />
+    <ProjectReference Include="..\CoCaro.Service\CoCaro.Service.csproj" />
+  </ItemGroup>
+
 
 </Project>

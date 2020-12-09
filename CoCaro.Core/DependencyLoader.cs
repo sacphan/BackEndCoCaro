@@ -35,6 +35,13 @@ namespace CoCaro.Core
                         serviceCollection.AddSingleton<IUserService, UserServices>();
                         //serviceCollection.AddSingleton<IWorkContext, ApiWorkContext>();
                         break;
+                    case "UserAPI":
+
+                        serviceCollection.AddSingleton<ITokenService, TokenService>();
+
+                        serviceCollection.AddSingleton<IUserService, UserServices>();
+                        //serviceCollection.AddSingleton<IWorkContext, ApiWorkContext>();
+                        break;
                 }
             }
             catch (ReflectionTypeLoadException typeLoadException)

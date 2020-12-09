@@ -14,6 +14,8 @@ namespace  CoCaro.Services.Users
 
         ErrorObject CreateUser(User user);
         ErrorObject Login(string Username, string Password);
-    
+        List<User> GetListUserOnline();
+
+
     }
 }
