@@ -37,12 +37,13 @@ namespace AdminAPI.Controllers
                 var result = _IUserService.Login(user.Username, user.Password);
                 if (result.Code == Error.SUCCESS.Code)
                 {
-                    var token = _TokenService.CreateToken(result.GetData<User>());
-                    if (result.GetData<User>().Role == 1)
-                    {
-                        return Ok(error.SetData(token));
-                    }
-                    else return Ok(Error.FAILED);
+                    //var token = _TokenService.CreateToken(result.GetData<User>());
+                    //if (result.GetData<User>().Role == 1)
+                    //{
+                    //    return Ok(error.SetData(token));
+                    //}
+                    //else return Ok(Error.FAILED);
+                    return Ok(result);
                 }
                 else
                 {
