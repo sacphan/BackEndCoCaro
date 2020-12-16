@@ -35,5 +35,11 @@ namespace UserAPI.Controllers
         {
             return Ok(_IPlayingService.JoinBoard(playHistory));
         }
+        [Route("api/GetListBoardBlank")]
+        [HttpPost]
+        public IActionResult GetListBoardBlank()
+        {
+            return Ok(_IBoardService.GetListBoardBlank());
+        }
     }
 }

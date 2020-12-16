@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using CoCaro.Data.Models;
 using CoCaro.Service.Chat;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace UserAPI.Models
 {
+    [Authorize]
     public class ChatHub : Hub
     {
         public static List<string> userOnline = new List<string>();

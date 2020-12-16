@@ -10,5 +10,6 @@ namespace CoCaro.Service.Board
     public interface IBoardService
     {
         ErrorObject CreateBoard(CoCaro.Data.Models.Board board);
+        ErrorObject GetListBoardBlank();
     }
 }

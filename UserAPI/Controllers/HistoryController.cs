@@ -1,4 +1,5 @@
 ﻿using CoCaro.Service.Playing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace UserAPI.Controllers
 {
+    [Authorize]
     public class HistoryController : Controller
     {
         private IPlayingService _IPlayingService;
