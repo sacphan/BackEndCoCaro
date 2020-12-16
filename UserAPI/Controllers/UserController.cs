@@ -32,7 +32,6 @@ namespace UserAPI.Controllers
             try
             {
 
-
                 var result = _IUserService.Login(user.Username, user.Password);
                 if (result.Code == Error.SUCCESS.Code)
                 {
@@ -159,6 +158,14 @@ namespace UserAPI.Controllers
         {
             return Ok(_IUserService.GetListUserOnline());
         }
+        [Route("api/isLogin")]
+        [Authorize]
+        [HttpGet]
+        public IActionResult CheckLogin() 
+        {
+            return Ok("true");
+        }
     }
+
 }
 
