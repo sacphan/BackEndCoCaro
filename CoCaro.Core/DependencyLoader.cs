@@ -1,6 +1,9 @@
 
 
+using CoCaro.Service.Board;
 using CoCaro.Service.Caching;
+using CoCaro.Service.Chat;
+using CoCaro.Service.Playing;
 using CoCaro.Service.Token;
 using CoCaro.Services.Users;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,8 +41,10 @@ namespace CoCaro.Core
                     case "UserAPI":
 
                         serviceCollection.AddSingleton<ITokenService, TokenService>();
-
                         serviceCollection.AddSingleton<IUserService, UserServices>();
+                        serviceCollection.AddSingleton<IBoardService, BoardService>();
+                        serviceCollection.AddSingleton<IChatService, ChatService>();
+                        serviceCollection.AddSingleton<IPlayingService, PlayingService>();
                         //serviceCollection.AddSingleton<IWorkContext, ApiWorkContext>();
                         break;
                 }

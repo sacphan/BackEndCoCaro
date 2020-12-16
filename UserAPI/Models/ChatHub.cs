@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CoCaro.Data.Models;
+using CoCaro.Service.Chat;
 using Microsoft.AspNetCore.SignalR;
 
 namespace UserAPI.Models
@@ -7,9 +9,19 @@ namespace UserAPI.Models
     public class ChatHub : Hub
     {
         public static List<string> userOnline = new List<string>();
-        public async Task Message(MessageModel message)
+        private IChatService _ICharService;
+        public ChatHub(IChatService chatService)
         {
-            await Clients.Others.SendAsync("message", message);
+            _ICharService = chatService;
+        }
+        public async Task Message(Message message)
+        {
+            if (!string.IsNullOrEmpty(message.Message1))
+            {
+                _ICharService.SendMessage(message.UserId.Value,message.BoardId.Value,message.Message1);
+                await Clients.Others.SendAsync("message", message.Message1);
+            }
+           
         }
         public async Task Online(string username)
         {
@@ -37,9 +49,5 @@ namespace UserAPI.Models
         }
     }
 
-    public class MessageModel
-    {
-        public string UserName { get; set; }
-        public string Message { get; set; }
-    }
+
 }
