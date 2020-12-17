@@ -1,4 +1,5 @@
 ﻿using CoCaro.Data.Models;
+using CoCaro.Models;
 using CoCaro.Service.Board;
 using CoCaro.Service.Playing;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace UserAPI.Controllers
 {
     [Authorize]
-    public class BoardController : Controller
+    public class BoardController : BaseController
     {
         private IBoardService _IBoardService;
         private IPlayingService _IPlayingService;
@@ -23,10 +24,25 @@ namespace UserAPI.Controllers
         }
         [Route("api/CreateBoard")]     
         [HttpPost]
-        public IActionResult CreateBoard([FromBody] Board board)
+        public IActionResult CreateBoard()
         {
+            var err = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                var checkblank = _IBoardService.GetBoardBlank(_User);
+                if (checkblank == null)
+                {
+                    err = _IBoardService.CreateBoard(_User);
+                }
+                else err.SetData(checkblank);
+                return Ok(err);
+            }
+            catch (Exception ex)
+            {
 
-            return Ok(_IBoardService.CreateBoard(board));
+                return Ok(err.Failed(ex.Message));
+            }
+            
          
         }
         [Route("api/JoinBoard")]

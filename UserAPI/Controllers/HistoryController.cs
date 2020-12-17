@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace UserAPI.Controllers
 {
     [Authorize]
-    public class HistoryController : Controller
+    public class HistoryController : BaseController
     {
         private IPlayingService _IPlayingService;
         public HistoryController(IPlayingService playingService)

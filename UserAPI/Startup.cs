@@ -30,7 +30,11 @@ namespace UserAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            //     services.AddMvc()
+            //.AddJsonOptions(
+            //    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            //);
 
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
@@ -55,6 +59,7 @@ namespace UserAPI
                };
            });
             DependencyLoader.LoadDependencies(services);
+            EngineContext.SetServiceProvider(services.BuildServiceProvider());
             services.AddSignalR();
         }
 
