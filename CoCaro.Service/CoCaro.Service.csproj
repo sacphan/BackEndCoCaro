@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BoardManager_Utilities\CoCaro.Utilities.csproj" />
     <ProjectReference Include="..\CoCaro.Data\CoCaro.Data.csproj" />
     <ProjectReference Include="..\CoCaro.Models\CoCaro.Models.csproj" />
     <ProjectReference Include="..\CoCaro.Utilities\CoCaro.Utilities.csproj" />
