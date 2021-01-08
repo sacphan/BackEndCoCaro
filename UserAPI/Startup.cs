@@ -87,6 +87,7 @@ namespace UserAPI
                 endpoints.MapHub<ChatHub>("/chatHub", options =>
                 {
                     options.Transports = HttpTransportType.WebSockets;
+                    
                 });
             });
         }

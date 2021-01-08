@@ -163,7 +163,7 @@ namespace UserAPI.Controllers
         [HttpGet]
         public IActionResult CheckLogin() 
         {
-            return Ok("true");
+            return Ok(_User);
         }
     }
 
