@@ -13,8 +13,8 @@ namespace CoCaro.Data.Models
     {
         public Board()
         {
+            Games = new HashSet<Game>();
             Messages = new HashSet<Message>();
-            PlayHistories = new HashSet<PlayHistory>();
         }
 
         [Key]
@@ -22,10 +22,13 @@ namespace CoCaro.Data.Models
         [StringLength(50)]
         public string Name { get; set; }
         public int? Status { get; set; }
+        [StringLength(10)]
+        public string Password { get; set; }
+        public int? TimeOfTurn { get; set; }
 
+        [InverseProperty(nameof(Game.Board))]
+        public virtual ICollection<Game> Games { get; set; }
         [InverseProperty(nameof(Message.Board))]
         public virtual ICollection<Message> Messages { get; set; }
-        [InverseProperty(nameof(PlayHistory.Board))]
-        public virtual ICollection<PlayHistory> PlayHistories { get; set; }
     }
 }

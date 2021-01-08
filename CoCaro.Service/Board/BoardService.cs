@@ -18,8 +18,8 @@ namespace CoCaro.Service.Board
                     db.Boards.Add(board);
                     db.SaveChanges();
                     board.Name = board.Id.ToString();
-                    db.PlayHistories.Add(
-                        new PlayHistory()
+                    db.Games.Add(
+                        new Game()
                         {
                             BoardId = board.Id,
                             UserId1 = user.Id
@@ -42,7 +42,7 @@ namespace CoCaro.Service.Board
             {
                 using (var db = new CoCaroContext())
                 {
-                    var playhistory = db.PlayHistories.FirstOrDefault(p => p.Result == 0 && p.UserId1 == null && p.UserId2 == null);
+                    var playhistory = db.Games.FirstOrDefault(p => p.Result == 0 && p.UserId1 == null && p.UserId2 == null);
                     if (playhistory!=null)
                     {
                         playhistory.UserId1 = user.Id;
@@ -66,7 +66,7 @@ namespace CoCaro.Service.Board
                 using (var db = new CoCaroContext())
                 {
 
-                    var listboardid = db.PlayHistories.Where(p => p.Result == 0 && (p.UserId1 == null || p.UserId2 == null)).Select(p => p.BoardId).Distinct().ToList();
+                    var listboardid = db.Games.Where(p => p.Result == 0 && (p.UserId1 == null || p.UserId2 == null)).Select(p => p.BoardId).Distinct().ToList();
                     var data = db.Boards.Where(b => listboardid.Contains(b.Id)).ToList();
                     err.SetData(data);
                 }

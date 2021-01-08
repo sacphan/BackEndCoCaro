@@ -47,9 +47,9 @@ namespace UserAPI.Controllers
         }
         [Route("api/JoinBoard")]
         [HttpPost]
-        public IActionResult JoinBoard([FromBody] PlayHistory playHistory)
+        public IActionResult JoinBoard([FromBody] Game game)
         {
-            return Ok(_IPlayingService.JoinBoard(playHistory));
+            return Ok(_IPlayingService.JoinBoard(game));
         }
         [Route("api/GetListBoardBlank")]
         [HttpPost]
