@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace UserAPI.Models
 {
-    [Authorize]
+    //[Authorize]
     public class ChatHub : Hub
     {
         public static List<string> userOnline = new List<string>();
