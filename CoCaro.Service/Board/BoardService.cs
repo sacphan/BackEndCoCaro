@@ -58,20 +58,16 @@ namespace CoCaro.Service.Board
             }
             return board;
         }
-        public ErrorObject GetListBoardBlank()
+        public ErrorObject GetListBoardValid()
         {
             var err = new ErrorObject(Error.SUCCESS);
             try
             {
                 using (var db = new CoCaroContext())
                 {
-
-                    var listboardid = db.Games.Where(p => p.Result == 0 && (p.UserId1 == null || p.UserId2 == null)).Select(p => p.BoardId).Distinct().ToList();
-                    var data = db.Boards.Where(b => listboardid.Contains(b.Id)).ToList();
+                    var data = db.Boards.Where(b => b.Status >0).ToList();
                     err.SetData(data);
                 }
-
-
             }
             catch (Exception ex)
             {

@@ -55,7 +55,7 @@ namespace UserAPI.Controllers
         [HttpPost]
         public IActionResult GetListBoardBlank()
         {
-            return Ok(_IBoardService.GetListBoardBlank());
+            return Ok(_IBoardService.GetListBoardValid());
         }
     }
 }
