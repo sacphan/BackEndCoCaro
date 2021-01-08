@@ -18,8 +18,9 @@ namespace CoCaro.Data.Models
         }
 
         public virtual DbSet<Board> Boards { get; set; }
+        public virtual DbSet<Game> Games { get; set; }
+        public virtual DbSet<GameHistory> GameHistories { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
-        public virtual DbSet<PlayHistory> PlayHistories { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -35,6 +36,33 @@ namespace CoCaro.Data.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
+            modelBuilder.Entity<Game>(entity =>
+            {
+                entity.Property(e => e.CreateDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Result).HasDefaultValueSql("((0))");
+
+                entity.HasOne(d => d.Board)
+                    .WithMany(p => p.Games)
+                    .HasForeignKey(d => d.BoardId)
+                    .HasConstraintName("FK_PlayHistory_Board");
+
+                entity.HasOne(d => d.UserId1Navigation)
+                    .WithMany(p => p.GameUserId1Navigations)
+                    .HasForeignKey(d => d.UserId1)
+                    .HasConstraintName("FK_PlayHistory_User1");
+
+                entity.HasOne(d => d.UserId2Navigation)
+                    .WithMany(p => p.GameUserId2Navigations)
+                    .HasForeignKey(d => d.UserId2)
+                    .HasConstraintName("FK_PlayHistory_User2");
+            });
+
+            modelBuilder.Entity<GameHistory>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+            });
+
             modelBuilder.Entity<Message>(entity =>
             {
                 entity.HasOne(d => d.Board)
@@ -46,26 +74,6 @@ namespace CoCaro.Data.Models
                     .WithMany(p => p.Messages)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_Messages_Users");
-            });
-
-            modelBuilder.Entity<PlayHistory>(entity =>
-            {
-                entity.Property(e => e.Result).HasDefaultValueSql("((0))");
-
-                entity.HasOne(d => d.Board)
-                    .WithMany(p => p.PlayHistories)
-                    .HasForeignKey(d => d.BoardId)
-                    .HasConstraintName("FK_PlayHistory_Board");
-
-                entity.HasOne(d => d.UserId1Navigation)
-                    .WithMany(p => p.PlayHistoryUserId1Navigations)
-                    .HasForeignKey(d => d.UserId1)
-                    .HasConstraintName("FK_PlayHistory_User1");
-
-                entity.HasOne(d => d.UserId2Navigation)
-                    .WithMany(p => p.PlayHistoryUserId2Navigations)
-                    .HasForeignKey(d => d.UserId2)
-                    .HasConstraintName("FK_PlayHistory_User2");
             });
 
             OnModelCreatingPartial(modelBuilder);

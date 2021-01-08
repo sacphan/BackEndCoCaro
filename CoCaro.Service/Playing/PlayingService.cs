@@ -9,7 +9,7 @@ namespace CoCaro.Service.Playing
 {
     public class PlayingService : IPlayingService
     {
-        public ErrorObject JoinBoard(PlayHistory playHistory)
+        public ErrorObject JoinBoard(Game game)
 
         {
             var err = new ErrorObject(Error.SUCCESS);
@@ -17,7 +17,7 @@ namespace CoCaro.Service.Playing
             {
                 using (var db = new CoCaroContext())
                 {
-                    var blankBoard = db.PlayHistories.FirstOrDefault(b => b.BoardId==playHistory.BoardId && (b.UserId1==null || b.UserId2==null));
+                    var blankBoard = db.Games.FirstOrDefault(b => b.BoardId==game.BoardId && (b.UserId1==null || b.UserId2==null));
 
                     if (blankBoard != null)
                     {
@@ -25,18 +25,18 @@ namespace CoCaro.Service.Playing
                     }
                     else
                     {
-                        db.PlayHistories.Add(playHistory);
-                        playHistory.Result = 0; //0:Chưa chơi  1:Thắng 2:Hòa 3:Thua
-                        if (playHistory.UserId1==null)
+                        db.Games.Add(game);
+                        game.Result = 0; //0:Chưa chơi  1:Thắng 2:Hòa 3:Thua
+                        if (game.UserId1==null)
                         {
-                            playHistory.UserId1 = playHistory.UserId1;
+                            game.UserId1 = game.UserId1;
                         }                            
                         else
                         {
-                            playHistory.UserId2 = playHistory.UserId1;
+                            game.UserId2 = game.UserId1;
                         }    
                         db.SaveChanges();
-                        err.SetData(playHistory);
+                        err.SetData(game);
                     }
 
                 }
@@ -56,7 +56,7 @@ namespace CoCaro.Service.Playing
             {
                 using (var db = new CoCaroContext())
                 {
-                    var playhistory = db.PlayHistories.Where(b => (b.UserId1 == userid || b.UserId2==userid) && b.Result!=0).ToList();
+                    var playhistory = db.Games.Where(b => (b.UserId1 == userid || b.UserId2==userid) && b.Result!=0).ToList();
                     err.SetData(playhistory);
                  
 

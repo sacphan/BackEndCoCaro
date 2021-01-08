@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace UserAPI.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private IUserService _IUserService;
         private ITokenService _TokenService;

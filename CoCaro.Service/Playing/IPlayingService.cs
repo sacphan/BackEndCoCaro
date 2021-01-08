@@ -10,7 +10,7 @@ namespace CoCaro.Service.Playing
 {
     public interface IPlayingService
     {
-        ErrorObject JoinBoard(PlayHistory playHistory);
+        ErrorObject JoinBoard(Game game);
         ErrorObject GetHistoryByUserId(int userid);
     }
 }

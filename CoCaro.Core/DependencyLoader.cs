@@ -5,9 +5,11 @@ using CoCaro.Service.Caching;
 using CoCaro.Service.Chat;
 using CoCaro.Service.Playing;
 using CoCaro.Service.Token;
+using CoCaro.Service.WorkContext;
 using CoCaro.Services.Users;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 
 using System.Reflection;
@@ -26,7 +28,7 @@ namespace CoCaro.Core
                 serviceCollection.AddSingleton<ICacheService, MemoryCacheService>();
                 serviceCollection.AddSingleton<ICacheKeyService, CacheKeyService>();
                 serviceCollection.AddSingleton<Microsoft.Extensions.Caching.Memory.IMemoryCache, Microsoft.Extensions.Caching.Memory.MemoryCache>();
-
+                serviceCollection.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
                 switch (Assembly.GetEntryAssembly()?.GetName().Name)
                 {
@@ -36,7 +38,7 @@ namespace CoCaro.Core
                         serviceCollection.AddSingleton<ITokenService, TokenService>();
 
                         serviceCollection.AddSingleton<IUserService, UserServices>();
-                        //serviceCollection.AddSingleton<IWorkContext, ApiWorkContext>();
+                        serviceCollection.AddSingleton<IWorkContext, ApiWorkContext>();
                         break;
                     case "UserAPI":
 
@@ -45,7 +47,7 @@ namespace CoCaro.Core
                         serviceCollection.AddSingleton<IBoardService, BoardService>();
                         serviceCollection.AddSingleton<IChatService, ChatService>();
                         serviceCollection.AddSingleton<IPlayingService, PlayingService>();
-                        //serviceCollection.AddSingleton<IWorkContext, ApiWorkContext>();
+                        serviceCollection.AddSingleton<IWorkContext, ApiWorkContext>();
                         break;
                 }
             }

@@ -1,4 +1,5 @@
-﻿using CoCaro.Models;
+﻿using CoCaro.Data.Models;
+using CoCaro.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,8 @@ namespace CoCaro.Service.Board
 {
     public interface IBoardService
     {
-        ErrorObject CreateBoard(CoCaro.Data.Models.Board board);
+        ErrorObject CreateBoard(User user);
         ErrorObject GetListBoardBlank();
+        CoCaro.Data.Models.Board GetBoardBlank(User user);
     }
 }

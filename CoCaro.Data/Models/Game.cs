@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoCaro.Data.Models
 {
-    [Table("PlayHistory")]
-    public partial class PlayHistory
+    [Table("Game")]
+    public partial class Game
     {
         [Key]
         public int Id { get; set; }
@@ -22,13 +22,13 @@ namespace CoCaro.Data.Models
         public int? UserId2 { get; set; }
 
         [ForeignKey(nameof(BoardId))]
-        [InverseProperty("PlayHistories")]
+        [InverseProperty("Games")]
         public virtual Board Board { get; set; }
         [ForeignKey(nameof(UserId1))]
-        [InverseProperty(nameof(User.PlayHistoryUserId1Navigations))]
+        [InverseProperty(nameof(User.GameUserId1Navigations))]
         public virtual User UserId1Navigation { get; set; }
         [ForeignKey(nameof(UserId2))]
-        [InverseProperty(nameof(User.PlayHistoryUserId2Navigations))]
+        [InverseProperty(nameof(User.GameUserId2Navigations))]
         public virtual User UserId2Navigation { get; set; }
     }
 }
