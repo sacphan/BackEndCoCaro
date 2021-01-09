@@ -22,40 +22,49 @@ namespace UserAPI.Controllers
             _IBoardService = boardService;
             _IPlayingService = playingService;
         }
-        [Route("api/CreateBoard")]     
-        [HttpPost]
-        public IActionResult CreateBoard()
-        {
-            var err = new ErrorObject(Error.SUCCESS);
-            try
-            {
-                var checkblank = _IBoardService.GetBoardBlank(_User);
-                if (checkblank == null)
-                {
-                    err = _IBoardService.CreateBoard(_User);
-                }
-                else err.SetData(checkblank);
-                return Ok(err);
-            }
-            catch (Exception ex)
-            {
-
-                return Ok(err.Failed(ex.Message));
-            }
-            
-         
-        }
-        [Route("api/JoinBoard")]
-        [HttpPost]
-        public IActionResult JoinBoard([FromBody] Game game)
-        {
-            return Ok(_IPlayingService.JoinBoard(game));
-        }
+       
+        //[Route("api/JoinBoard")]
+        //[HttpPost]
+        //public IActionResult JoinBoard([FromBody] Game game)
+        //{
+        //    return Ok(_IPlayingService.JoinBoard(game));
+        //}
         [Route("api/GetListBoardBlank")]
         [HttpPost]
         public IActionResult GetListBoardBlank()
         {
             return Ok(_IBoardService.GetListBoardValid());
+        }
+        [HttpPost]
+        [Route("api/Board/JoinBoard")]
+        public IActionResult JoinBoard([FromBody] Board board)
+        {
+            var err = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                err =_IBoardService.GetBoardByIdAndPass(board);
+                return Ok(err);
+            }
+            catch (Exception ex)
+            {
+                return (Ok(err.System(ex)));
+            }
+        }
+        [HttpPost]
+        [Route("api/Board/CreateBoard")]
+        public IActionResult CreateBoard([FromBody] Board board)
+        {
+            var err = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                board.Owner = _User.Id;
+                err = _IBoardService.CreateBoard(board);
+                return Ok(err);
+            }
+            catch (Exception ex)
+            {
+                return (Ok(err.System(ex)));
+            }
         }
     }
 }

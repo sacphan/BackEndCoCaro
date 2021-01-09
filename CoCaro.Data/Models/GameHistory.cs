@@ -17,5 +17,9 @@ namespace CoCaro.Data.Models
         public int? PlayerId { get; set; }
         public int? Turn { get; set; }
         public int? TimeOfTurn { get; set; }
+
+        [ForeignKey(nameof(GameId))]
+        [InverseProperty("GameHistories")]
+        public virtual Game Game { get; set; }
     }
 }

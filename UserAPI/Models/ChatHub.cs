@@ -15,12 +15,12 @@ namespace UserAPI.Models
         public ChatHub(IChatService chatService)
         {
             _ICharService = chatService;
-        }
+        }   
         public async Task Message(Message message)
         {
             if (!string.IsNullOrEmpty(message.Message1))
             {
-                _ICharService.SendMessage(message.UserId.Value,message.BoardId.Value,message.Message1);
+                _ICharService.SendMessage(message.UserId.Value,message.GameId.Value,message.Message1);
                 await Clients.Others.SendAsync("message", message.Message1);
             }
            

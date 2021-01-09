@@ -10,7 +10,7 @@ namespace CoCaro.Service.Chat
 {
     public class ChatService: IChatService
     {
-        public ErrorObject SendMessage(int userId,int boardId,string message)
+        public ErrorObject SendMessage(int userId,int gameId,string message)
         {
             var err = new ErrorObject(Error.SUCCESS);
             try
@@ -21,7 +21,7 @@ namespace CoCaro.Service.Chat
                     {
                         Message1 = message,
                         UserId = userId,
-                        BoardId = boardId
+                        GameId = gameId
                     };
                     db.Messages.Add(messageSend);
                  
@@ -37,14 +37,14 @@ namespace CoCaro.Service.Chat
             }
             return err;
         }
-        public ErrorObject LoadMessageByBoardId(int boardId)
+        public ErrorObject LoadMessageByBoardId(int GameId)
         {
             var err = new ErrorObject(Error.SUCCESS);
             try
             {
                 using (var db = new CoCaroContext())
                 {              
-                    var listMes = db.Messages.Where(m=>m.BoardId == boardId).ToList();
+                    var listMes = db.Messages.Where(m=>m.GameId == GameId).ToList();
                     err.SetData(listMes);
                 }
             }

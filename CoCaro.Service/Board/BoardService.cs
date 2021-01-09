@@ -7,25 +7,17 @@ namespace CoCaro.Service.Board
 {
     public class BoardService : IBoardService
     {
-        public ErrorObject CreateBoard(User user)
+        public ErrorObject CreateBoard(CoCaro.Data.Models.Board board)
         {
             var err = new ErrorObject(Error.SUCCESS);
             try
             {
                 using (var db = new CoCaroContext())
                 {
-                    var board = new CoCaro.Data.Models.Board();
+                    board.Status = 1;
                     db.Boards.Add(board);
                     db.SaveChanges();
-                    board.Name = board.Id.ToString();
-                    db.Games.Add(
-                        new Game()
-                        {
-                            BoardId = board.Id,
-                            UserId1 = user.Id
-                        }) ;
-                    db.SaveChanges();
-                    err.SetData(board);
+                    return err.SetData(board);
                 }
             }
             catch (Exception ex)
@@ -33,7 +25,6 @@ namespace CoCaro.Service.Board
 
                 return err.Failed(ex.Message);
             }
-            return err;
         }
         public CoCaro.Data.Models.Board GetBoardBlank(User user)
         {
@@ -75,6 +66,27 @@ namespace CoCaro.Service.Board
                 return err.Failed(ex.Message);
             }
             return err;
+        }
+        public ErrorObject GetBoardByIdAndPass(CoCaro.Data.Models.Board board)
+        {
+            var error = Error.Success();
+            try
+            {
+                using (var db = new CoCaroContext())
+                {
+                    var b = db.Boards.Where(b => b.Id ==board.Id).FirstOrDefault();
+                    if (b.Password.Length == 0 || b.Password == board.Password)
+                    {
+                        return error.SetData(b);
+                    }
+                }
+                return error.Failed("Wrong Password");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }
