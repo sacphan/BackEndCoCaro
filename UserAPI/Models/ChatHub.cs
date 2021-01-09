@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CoCaro.Data.Models;
 using CoCaro.Service.Chat;
@@ -33,7 +34,8 @@ namespace UserAPI.Models
                 {
                     userOnline.Add(username);
                 }                  
-                await Clients.All.SendAsync("online", userOnline);
+                
+                await Clients.All.SendAsync("online", userOnline.Distinct().OrderBy(n=>n));
             }    
            
         }

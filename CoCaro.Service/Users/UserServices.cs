@@ -73,7 +73,20 @@ namespace CoCaro.Services.Users
                 throw;
             }
         }
-        
+        public List<User> GetInfoByUserName(string username)
+        {
+            try
+            {
+                using var db = new CoCaroContext();
+                return db.Users.Where(x => x.IsOnline == true).ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
 
     }
 }
