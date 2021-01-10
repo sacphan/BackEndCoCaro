@@ -75,7 +75,7 @@ namespace CoCaro.Service.Board
                 using (var db = new CoCaroContext())
                 {
                     var b = db.Boards.Where(b => b.Id ==board.Id).FirstOrDefault();
-                    if (b.Password.Length == 0 || b.Password == board.Password)
+                    if (b.Password == null|| b.Password=="" || b.Password == board.Password)
                     {
                         return error.SetData(b);
                     }
@@ -85,6 +85,36 @@ namespace CoCaro.Service.Board
             catch (Exception)
             {
 
+                throw;
+            }
+        }
+        public ErrorObject CheckBoard(int id)
+        {
+            var error = Error.Success();
+
+            try
+            {
+                using (var db = new CoCaroContext())
+                {
+                    var b = db.Boards.FirstOrDefault(b => b.Id ==id);
+                    if (b == null || b.Status == 0)
+                    {
+                        return error.Failed("Bàn chơi không tồn tại");
+                    } 
+                    if (b.Status == 2)
+                    {
+                        return error.Failed("Bàn chơi đã đầy");
+                    }
+                    if (b.Password != null && b.Password.Length> 0)
+                    {
+                        return error.Failed("Has password").SetData(b);
+                    }
+                }
+                return error;
+            }
+            catch (Exception)
+            {
+                
                 throw;
             }
         }

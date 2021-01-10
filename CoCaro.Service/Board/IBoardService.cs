@@ -14,5 +14,6 @@ namespace CoCaro.Service.Board
         ErrorObject GetListBoardValid();
         CoCaro.Data.Models.Board GetBoardBlank(User user);
         ErrorObject GetBoardByIdAndPass(CoCaro.Data.Models.Board board);
+        ErrorObject CheckBoard(int id);
     }
 }
