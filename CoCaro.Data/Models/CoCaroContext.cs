@@ -61,14 +61,19 @@ namespace CoCaro.Data.Models
             modelBuilder.Entity<GameHistory>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.HasOne(d => d.Game)
+                    .WithMany(p => p.GameHistories)
+                    .HasForeignKey(d => d.GameId)
+                    .HasConstraintName("FK_GameHistory_Game");
             });
 
             modelBuilder.Entity<Message>(entity =>
             {
-                entity.HasOne(d => d.Board)
+                entity.HasOne(d => d.Game)
                     .WithMany(p => p.Messages)
-                    .HasForeignKey(d => d.BoardId)
-                    .HasConstraintName("FK_Messages_Board");
+                    .HasForeignKey(d => d.GameId)
+                    .HasConstraintName("FK_Messages_Game");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Messages)

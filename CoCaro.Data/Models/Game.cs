@@ -11,6 +11,12 @@ namespace CoCaro.Data.Models
     [Table("Game")]
     public partial class Game
     {
+        public Game()
+        {
+            GameHistories = new HashSet<GameHistory>();
+            Messages = new HashSet<Message>();
+        }
+
         [Key]
         public int Id { get; set; }
         public int? UserId1 { get; set; }
@@ -30,5 +36,9 @@ namespace CoCaro.Data.Models
         [ForeignKey(nameof(UserId2))]
         [InverseProperty(nameof(User.GameUserId2Navigations))]
         public virtual User UserId2Navigation { get; set; }
+        [InverseProperty(nameof(GameHistory.Game))]
+        public virtual ICollection<GameHistory> GameHistories { get; set; }
+        [InverseProperty(nameof(Message.Game))]
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

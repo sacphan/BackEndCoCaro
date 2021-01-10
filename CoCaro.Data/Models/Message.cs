@@ -13,14 +13,16 @@ namespace CoCaro.Data.Models
         [Key]
         public int Id { get; set; }
         public int? UserId { get; set; }
-        public int? BoardId { get; set; }
+        public int? GameId { get; set; }
         [Column("Message")]
         [StringLength(1000)]
         public string Message1 { get; set; }
+        public int? Turn { get; set; }
+        public int? TimeOfTurn { get; set; }
 
-        [ForeignKey(nameof(BoardId))]
+        [ForeignKey(nameof(GameId))]
         [InverseProperty("Messages")]
-        public virtual Board Board { get; set; }
+        public virtual Game Game { get; set; }
         [ForeignKey(nameof(UserId))]
         [InverseProperty("Messages")]
         public virtual User User { get; set; }
