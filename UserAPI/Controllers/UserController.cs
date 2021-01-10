@@ -165,6 +165,13 @@ namespace UserAPI.Controllers
         {
             return Ok(_User);
         }
+        [Route("api/GetInfoByUserName")]
+        [Authorize]
+        [HttpPost]
+        public IActionResult GetInfoByUserName([FromBody] string username)
+        {
+            return Ok(_IUserService.GetInfoByUserName(username));
+        }
     }
 
 }

@@ -73,18 +73,30 @@ namespace CoCaro.Services.Users
                 throw;
             }
         }
-        public List<User> GetInfoByUserName(string username)
+        public UserInfo GetInfoByUserName(string username)
         {
+            UserInfo userinfo = null;
             try
             {
                 using var db = new CoCaroContext();
-                return db.Users.Where(x => x.IsOnline == true).ToList();
+                var user = db.Users.FirstOrDefault(x => x.Username.ToLower().Equals(username.ToLower()));
+                userinfo = new UserInfo()
+                {
+                    Username = user.Username,
+                    Cup = user.Cup,
+                    RateWin = user.RateWin,
+                    TotalGame = user.TotalGame,
+                    CreateDate = user.CreateDate == null ? string.Empty : user.CreateDate.Value.ToString("dd/MM/yyyy")
+
+                };
+                userinfo.Rank = db.Users.Where(u=>u.Cup!=null).OrderBy(u => u.Cup).ToList().IndexOf(user) + 1;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
+            return userinfo;
         }
 
 

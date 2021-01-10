@@ -27,6 +27,7 @@ namespace CoCaro.Data.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+          
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=103.1.210.65;Initial Catalog=CoCaro;Integrated Security=False;Persist Security Info=False;User ID=testDB;Password=1234Bbbb!!@@");
             }
@@ -79,6 +80,11 @@ namespace CoCaro.Data.Models
                     .WithMany(p => p.Messages)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_Messages_Users");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Property(e => e.CreateDate).HasDefaultValueSql("(getdate())");
             });
 
             OnModelCreatingPartial(modelBuilder);

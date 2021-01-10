@@ -27,6 +27,11 @@ namespace CoCaro.Data.Models
         public int? FacebookId { get; set; }
         public int? RoleId { get; set; }
         public bool? IsOnline { get; set; }
+        public int? Cup { get; set; }
+        public double? RateWin { get; set; }
+        public int? TotalGame { get; set; }
+        [Column(TypeName = "date")]
+        public DateTime? CreateDate { get; set; }
 
         [InverseProperty(nameof(Game.UserId1Navigation))]
         public virtual ICollection<Game> GameUserId1Navigations { get; set; }
