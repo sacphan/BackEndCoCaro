@@ -13,7 +13,9 @@ namespace CoCaro.Service.Board
         ErrorObject CreateBoard(CoCaro.Data.Models.Board board);
         ErrorObject GetListBoardValid();
         CoCaro.Data.Models.Board GetBoardBlank(User user);
-        ErrorObject GetBoardByIdAndPass(CoCaro.Data.Models.Board board);
+        ErrorObject JoinBoard(CoCaro.Data.Models.Board board, int UserId2);
         ErrorObject CheckBoard(int id);
+        ErrorObject JoinBoardNow(int UserId2);
+
     }
 }

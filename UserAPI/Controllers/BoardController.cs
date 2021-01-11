@@ -50,7 +50,7 @@ namespace UserAPI.Controllers
                         return Ok(result);
                     }                   
                 }
-                err =_IBoardService.GetBoardByIdAndPass(board);
+                err =_IBoardService.JoinBoard(board, _User.Id);
                 return Ok(err);
             }
             catch (Exception ex)
@@ -67,6 +67,21 @@ namespace UserAPI.Controllers
             {
                 board.Owner = _User.Id;
                 err = _IBoardService.CreateBoard(board);
+                return Ok(err);
+            }
+            catch (Exception ex)
+            {
+                return (Ok(err.System(ex)));
+            }
+        }
+
+        [Route("api/Board/JoinBoardNow")]
+        public IActionResult JoinBoardNow()
+        {
+            var err = new ErrorObject(Error.SUCCESS);
+            try
+            {               
+                err = _IBoardService.JoinBoardNow(_User.Id);
                 return Ok(err);
             }
             catch (Exception ex)

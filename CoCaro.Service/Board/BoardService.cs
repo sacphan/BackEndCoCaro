@@ -14,10 +14,37 @@ namespace CoCaro.Service.Board
             {
                 using (var db = new CoCaroContext())
                 {
-                    board.Status = 1;
-                    db.Boards.Add(board);
+                    var b = db.Boards.FirstOrDefault(x => x.Status == 0 || x.Status ==null);
+                    if (b!= null)
+                    {
+                        b.Status = 1;
+                        b.Password = board.Password;
+                        b.Owner = board.Owner;
+                        b.TimeOfTurn = board.TimeOfTurn;
+                        board.Id = b.Id;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        board.Status = 1;
+                        db.Boards.Add(board);
+                        db.SaveChanges();
+                    }
+                    err.SetData(board);
+                    var game = db.Games.FirstOrDefault(x => x.BoardId == board.Id &&  x.Result == null);
+                    if (game != null)
+                    {
+                        game.UserId1 = board.Owner;
+                    }
+                    else
+                    {
+                        game = new Game();
+                        game.UserId1 = board.Owner;
+                        game.BoardId = board.Id;
+                        db.Add(game);
+                    }
                     db.SaveChanges();
-                    return err.SetData(board);
+                    return err;
                 }
             }
             catch (Exception ex)
@@ -28,18 +55,18 @@ namespace CoCaro.Service.Board
         }
         public CoCaro.Data.Models.Board GetBoardBlank(User user)
         {
-            CoCaro.Data.Models.Board board = null  ;
+            CoCaro.Data.Models.Board board = null;
             try
             {
                 using (var db = new CoCaroContext())
                 {
                     var playhistory = db.Games.FirstOrDefault(p => p.Result == 0 && p.UserId1 == null && p.UserId2 == null);
-                    if (playhistory!=null)
+                    if (playhistory != null)
                     {
                         playhistory.UserId1 = user.Id;
                         board = db.Boards.FirstOrDefault(b => b.Id == playhistory.BoardId);
-                    }    
-                         
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -56,7 +83,7 @@ namespace CoCaro.Service.Board
             {
                 using (var db = new CoCaroContext())
                 {
-                    var data = db.Boards.Where(b => b.Status >0).ToList();
+                    var data = db.Boards.Where(b => b.Status > 0).ToList();
                     err.SetData(data);
                 }
             }
@@ -67,16 +94,22 @@ namespace CoCaro.Service.Board
             }
             return err;
         }
-        public ErrorObject GetBoardByIdAndPass(CoCaro.Data.Models.Board board)
+        public ErrorObject JoinBoard(CoCaro.Data.Models.Board board, int UserId2) // join board
         {
             var error = Error.Success();
             try
             {
                 using (var db = new CoCaroContext())
                 {
-                    var b = db.Boards.Where(b => b.Id ==board.Id).FirstOrDefault();
-                    if (b.Password == null|| b.Password=="" || b.Password == board.Password)
+                    var b = db.Boards.Where(b => b.Id == board.Id).FirstOrDefault();
+                    if (b.Password == null || b.Password == "" || b.Password == board.Password)
                     {
+                        var game = db.Games.FirstOrDefault(x => x.BoardId == board.Id && x.Result == null);
+                        if (game != null)
+                        {
+                            game.UserId2 = UserId2;
+                            db.SaveChanges();
+                        }
                         return error.SetData(b);
                     }
                 }
@@ -96,16 +129,16 @@ namespace CoCaro.Service.Board
             {
                 using (var db = new CoCaroContext())
                 {
-                    var b = db.Boards.FirstOrDefault(b => b.Id ==id);
+                    var b = db.Boards.FirstOrDefault(b => b.Id == id);
                     if (b == null || b.Status == 0)
                     {
                         return error.Failed("Bàn chơi không tồn tại");
-                    } 
+                    }
                     if (b.Status == 2)
                     {
                         return error.Failed("Bàn chơi đã đầy");
                     }
-                    if (b.Password != null && b.Password.Length> 0)
+                    if (b.Password != null && b.Password.Length > 0)
                     {
                         return error.Failed("Has password").SetData(b);
                     }
@@ -114,7 +147,35 @@ namespace CoCaro.Service.Board
             }
             catch (Exception)
             {
-                
+
+                throw;
+            }
+        }
+        public ErrorObject JoinBoardNow(int UserId2)
+        {
+            var error = Error.Success();
+            try
+            {
+                using (var db = new CoCaroContext())
+                {
+                    var b = db.Boards.Where(b => b.Status == 1 && b.Password == null).FirstOrDefault(); 
+                    if (b != null)
+                    {
+                        b.Status = 2;
+                        var game = db.Games.FirstOrDefault(x => x.BoardId == b.Id && x.Result == null);
+                        if (game != null)
+                        {
+                            game.UserId2 = UserId2;
+                        }
+                        db.SaveChanges();
+                        return error.SetData(b);
+                    }
+                    return error.Failed("Không có phòng trống");
+                }
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }
