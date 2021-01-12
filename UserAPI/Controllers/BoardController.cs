@@ -42,7 +42,7 @@ namespace UserAPI.Controllers
             var err = new ErrorObject(Error.SUCCESS);
             try
             {
-                if (board.Password == null)
+                if (board.Password == null) 
                 {
                     var result = _IBoardService.CheckBoard(board.Id);
                     if (result.Code == Error.FAILED.Code)

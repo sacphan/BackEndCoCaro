@@ -12,8 +12,7 @@ using System.Threading.Tasks;
 
 namespace AdminAPI.Controllers
 {
-    [Authorize]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private IUserService _IUserService;
         private ITokenService _TokenService;
@@ -37,13 +36,8 @@ namespace AdminAPI.Controllers
                 var result = _IUserService.Login(user.Username, user.Password);
                 if (result.Code == Error.SUCCESS.Code)
                 {
-                    //var token = _TokenService.CreateToken(result.GetData<User>());
-                    //if (result.GetData<User>().Role == 1)
-                    //{
-                    //    return Ok(error.SetData(token));
-                    //}
-                    //else return Ok(Error.FAILED);
-                    return Ok(result);
+                    var token = _TokenService.CreateToken(result.GetData<User>());
+                    return Ok(error.SetData(token));
                 }
                 else
                 {
@@ -55,31 +49,14 @@ namespace AdminAPI.Controllers
                 return Ok(error.System(ex));
             }
         }
-        [Route("api/register")]
-        [AllowAnonymous]
-        [HttpPost]
-        public IActionResult Register([FromBody] User user)
+        [Route("api/isLogin")]
+        [Authorize]
+        [HttpGet]
+        public IActionResult CheckLogin()
         {
-
-            //IActionResult response = Unauthorized();
-            var error = new ErrorObject(Error.SUCCESS);
-            try
-            {
-                //var userinfo = _Mapper.Map<UserInfo>(model);
-                error = _IUserService.CreateUser(user);
-                if (error.Code == Error.SUCCESS.Code)
-                {
-
-                    var token = _TokenService.CreateToken(error.GetData<User>());
-                    return Ok(error.SetData(token));
-                }
-                return Ok(error);
-            }
-            catch (Exception ex)
-            {
-                return Ok(error.System(ex));
-            }
+            return Ok(_User);
         }
+       
         [Route("api/refreshtoken")]
         [HttpPost]
         [AllowAnonymous]

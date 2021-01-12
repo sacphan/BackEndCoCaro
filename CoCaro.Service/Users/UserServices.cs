@@ -35,7 +35,28 @@ namespace CoCaro.Services.Users
                 throw ex;
             }
         }
+        public ErrorObject LoginAdmin(string Username, string Password)
+        {
+            var error = Error.Success();
+            try
+            {
+                using var db = new CoCaroContext();
+                var user = db.Users.FirstOrDefault(x =>x.RoleId == 1 && x.Username.ToLower().Equals(Username.ToLower()) && x.Password.Equals(Password));
+                if (user != null)
+                {
+                    return error.SetData(user);
+                }
+                else
+                {
+                    return Error.USER_INVALID;
+                }
 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public ErrorObject CreateUser(User user)
         {
             var error = Error.Success();

@@ -71,6 +71,8 @@ namespace AdminAPI
 
             app.UseRouting();
 
+            app.UseCors("MyPolicy");
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
