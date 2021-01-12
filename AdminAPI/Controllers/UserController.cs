@@ -54,7 +54,7 @@ namespace AdminAPI.Controllers
         [HttpGet]
         public IActionResult CheckLogin()
         {
-            return Ok(_User);
+            return Ok(true);
         }
        
         [Route("api/refreshtoken")]
@@ -83,9 +83,44 @@ namespace AdminAPI.Controllers
             }
             catch (Exception ex)
             {
-                error.Failed(ex.Message);
+                error.Failed(ex.Message);   
             }
             return Ok(error);
+        }
+        [Route("api/GetListUser")]
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetListUser()
+        {
+            var error = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                error=  _IUserService.GetListUser();
+                return Ok(error);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        [Route("api/BlockUser")]
+        [HttpPost]
+        [Authorize]
+        public IActionResult BlockUser([FromBody]int id)
+        {
+            var error = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                error = _IUserService.BlockUser(id);
+                return Ok(error);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

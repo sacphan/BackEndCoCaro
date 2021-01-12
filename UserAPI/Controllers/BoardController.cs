@@ -1,7 +1,6 @@
 ﻿using CoCaro.Data.Models;
 using CoCaro.Models;
 using CoCaro.Service.Board;
-using CoCaro.Service.Playing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,12 +14,10 @@ namespace UserAPI.Controllers
     public class BoardController : BaseController
     {
         private IBoardService _IBoardService;
-        private IPlayingService _IPlayingService;
 
-        public BoardController(IBoardService boardService, IPlayingService playingService)
+        public BoardController(IBoardService boardService)
         {
             _IBoardService = boardService;
-            _IPlayingService = playingService;
         }
        
         //[Route("api/JoinBoard")]

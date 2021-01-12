@@ -16,7 +16,8 @@ namespace  CoCaro.Services.Users
         ErrorObject Login(string Username, string Password);
     
         UserInfo GetInfoByUserName(string username);
-
+        ErrorObject GetListUser();
+        ErrorObject BlockUser(int userId);
 
     }
 }
