@@ -89,6 +89,11 @@ namespace UserAPI
                     options.Transports = HttpTransportType.WebSockets;
                     
                 });
+                endpoints.MapHub<GameHub>("/gameHub", options =>
+                {
+                    options.Transports = HttpTransportType.WebSockets;
+
+                });
             });
         }
     }

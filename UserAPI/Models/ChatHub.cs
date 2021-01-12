@@ -12,20 +12,7 @@ namespace UserAPI.Models
     public class ChatHub : Hub
     {
         public static List<string> userOnline = new List<string>();
-        private IChatService _ICharService;
-        public ChatHub(IChatService chatService)
-        {
-            _ICharService = chatService;
-        }   
-        public async Task Message(Message message)
-        {
-            if (!string.IsNullOrEmpty(message.Message1))
-            {
-                _ICharService.SendMessage(message.UserId.Value,message.GameId.Value,message.Message1);
-                await Clients.Others.SendAsync("message", message.Message1);
-            }
-           
-        }
+     
         public async Task Online(string username)
         {
             if (!string.IsNullOrEmpty(username))
