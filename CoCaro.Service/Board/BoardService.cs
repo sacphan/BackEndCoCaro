@@ -38,7 +38,7 @@ namespace CoCaro.Service.Board
                     }
                     else
                     {
-                        game = new Game();
+                        game = new CoCaro.Data.Models.Game();
                         game.UserId1 = board.Owner;
                         game.BoardId = board.Id;
                         db.Add(game);
