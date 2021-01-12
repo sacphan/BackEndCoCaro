@@ -29,12 +29,8 @@ namespace UserAPI.Models
         public async Task Online(string username)
         {
             if (!string.IsNullOrEmpty(username))
-            {
-                if (!userOnline.Contains(username))
-                {
-                    userOnline.Add(username);
-                }                  
-                
+            {                
+                userOnline.Add(username);                                               
                 await Clients.All.SendAsync("online", userOnline.Distinct().OrderBy(n=>n));
             }    
            
@@ -46,8 +42,7 @@ namespace UserAPI.Models
                 if (userOnline.Contains(username))
                 {
                     userOnline.Remove(username);
-                }
-                
+                }                
                 await Clients.All.SendAsync("offline", userOnline);
             }
         }

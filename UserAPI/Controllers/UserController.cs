@@ -151,13 +151,8 @@ namespace UserAPI.Controllers
                 return Ok(error.System(ex));
             }
         }
-        [Route("api/GetUserOnline")]
-        [Authorize]
-        [HttpGet]
-        public IActionResult GetUserOnline()
-        {
-            return Ok(_IUserService.GetListUserOnline());
-        }
+       
+        
         [Route("api/isLogin")]
         [Authorize]
         [HttpGet]
