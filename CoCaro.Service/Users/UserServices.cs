@@ -19,7 +19,7 @@ namespace CoCaro.Services.Users
             try
             {
                 using var db = new CoCaroContext();
-                var user = db.Users.FirstOrDefault(x => x.Username.ToLower().Equals(Username.ToLower()) && x.Password.Equals(Password));
+                var user = db.Users.FirstOrDefault(x => x.Username.ToLower().Equals(Username.ToLower()) && x.Password.Equals(Password) && x.IsBlock != true);
                 if (user != null)
                 {
                     return error.SetData(user);
@@ -107,7 +107,45 @@ namespace CoCaro.Services.Users
             }
             return userinfo;
         }
+        public ErrorObject GetListUser()
+        {
+            var error = Error.Success();
+            try
+            {
+                using var db = new CoCaroContext();
+                var users = db.Users.Where(x=>x.RoleId != 1).ToList();
+                return error.SetData(users);
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
+            return error;
+        }
+        public ErrorObject BlockUser(int userId)
+        {
+            var error = Error.Success();
+            try
+            {
+                using var db = new CoCaroContext();
+                var users = db.Users.FirstOrDefault(x => x.Id == userId);
+                if (users.IsBlock != null)
+                {
+                    users.IsBlock = !users.IsBlock;
+                }
+                else
+                {
+                    users.IsBlock = true;
+                }
+                db.SaveChanges();
+                return error.SetData(users);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
     }
 }
