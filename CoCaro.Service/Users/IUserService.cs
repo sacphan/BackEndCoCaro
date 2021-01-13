@@ -18,6 +18,7 @@ namespace  CoCaro.Services.Users
         UserInfo GetInfoByUserName(string username);
         ErrorObject GetListUser();
         ErrorObject BlockUser(int userId);
+        ErrorObject SeachUserByEmailOrName (string Keyword);
 
     }
 }

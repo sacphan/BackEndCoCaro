@@ -113,7 +113,7 @@ namespace CoCaro.Services.Users
             try
             {
                 using var db = new CoCaroContext();
-                var users = db.Users.Where(x=>x.RoleId != 1).ToList();
+                var users = db.Users.ToList();
                 return error.SetData(users);
             }
             catch (Exception ex)
@@ -145,6 +145,21 @@ namespace CoCaro.Services.Users
             {
                 throw ex;
             }
+        }
+        public ErrorObject SeachUserByEmailOrName(string Keyword)
+        {
+            var error = Error.Success();
+            try
+            {
+                using var db = new CoCaroContext();
+                var users = db.Users.Where(x => x.Email.Contains(Keyword) || x.FullName.Contains(Keyword) || x.Username.Contains(Keyword)).ToList();
+                return error.SetData(users);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return error;
         }
 
     }

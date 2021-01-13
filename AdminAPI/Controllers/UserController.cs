@@ -1,5 +1,6 @@
 ﻿using CoCaro.Data.Models;
 using CoCaro.Models;
+using CoCaro.Service.Game;
 using CoCaro.Service.Token;
 using CoCaro.Services.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -16,10 +17,12 @@ namespace AdminAPI.Controllers
     {
         private IUserService _IUserService;
         private ITokenService _TokenService;
-        public UserController(IUserService userService, ITokenService tokenService)
+        private IGameService _GameService;
+        public UserController(IUserService userService, ITokenService tokenService, IGameService gameService)
         {
             _IUserService = userService;
             _TokenService = tokenService;
+            _GameService = gameService;
         }
         [Route("api/login")]
         [AllowAnonymous]
@@ -122,5 +125,55 @@ namespace AdminAPI.Controllers
                 throw;
             }
         }
+        [Route("api/GetListGame")]
+        [HttpPost]
+        [Authorize]
+        public IActionResult GetListGame([FromBody] int id)
+        {
+            var error = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                error = _GameService.GetListGameById(id);
+                return Ok(error);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        [Route("api/GetListChat")]
+        [HttpPost]
+        [Authorize]
+        public IActionResult GetListChat([FromBody] int gameId)
+        {
+            var error = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                error = _GameService.GetListChatByGameId(gameId);
+                return Ok(error);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [Route("api/SearchUser")]
+        [HttpPost]
+        [Authorize]
+        public IActionResult SearchUser([FromBody] string keyword)
+        {
+            var error = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                error = _IUserService.SeachUserByEmailOrName(keyword);
+                return Ok(error);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

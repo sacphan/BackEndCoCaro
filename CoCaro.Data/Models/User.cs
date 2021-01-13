@@ -32,6 +32,10 @@ namespace CoCaro.Data.Models
         [Column(TypeName = "date")]
         public DateTime? CreateDate { get; set; }
         public bool? IsBlock { get; set; }
+        [StringLength(200)]
+        public string Email { get; set; }
+        [StringLength(200)]
+        public string FullName { get; set; }
 
         [InverseProperty(nameof(Game.UserId1Navigation))]
         public virtual ICollection<Game> GameUserId1Navigations { get; set; }

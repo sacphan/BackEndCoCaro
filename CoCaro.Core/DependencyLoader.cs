@@ -39,6 +39,8 @@ namespace CoCaro.Core
 
                         serviceCollection.AddSingleton<IUserService, UserServices>();
                         serviceCollection.AddSingleton<IWorkContext, ApiWorkContext>();
+                        serviceCollection.AddSingleton<IGameService, GameServices>();
+
                         break;
                     case "UserAPI":
 
