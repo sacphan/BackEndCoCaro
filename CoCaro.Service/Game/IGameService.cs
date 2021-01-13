@@ -12,6 +12,7 @@ namespace CoCaro.Service.Game
     public interface IGameService
     {
         ErrorObject GetListGameById(int UserId);
+        ErrorObject GetListChatByGameId(int GameId);
 
     }
 }
