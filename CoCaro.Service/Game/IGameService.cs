@@ -17,5 +17,6 @@ namespace CoCaro.Service.Game
         ErrorObject GetListChatByGameId(int GameId);
         List<GameHistory> getListGameHistory(int gameid);
         ErrorObject WinGame(int WinnerId, int LoserId, int GameId);
+        ErrorObject GetGameHistoryByGameId(int gameId);
     }
 }

@@ -26,6 +26,30 @@ namespace UserAPI.Controllers
             {
                 err = _GameService.GetGameByBoardId(boardId, _User.Id);
                 if (err.Code == Error.SUCCESS.Code)
+                {
+                    return Ok(err);
+                }
+
+                else
+                {
+                    return Ok(err);
+                }
+            }
+            catch (Exception ex)
+            {
+                return (Ok(err.System(ex)));
+            }
+        }
+        [HttpPost]
+        [Route("api/GetGameHistoryByGameId")]
+        public IActionResult GetGameHistoryByGameId([FromBody] int gameId)
+        {
+            var err = new ErrorObject(Error.SUCCESS);
+            try
+            {
+              
+                err = _GameService.GetGameHistoryByGameId(gameId);
+                if (err.Code == Error.SUCCESS.Code)
                 {                
                         return Ok(err);                    
                 }
@@ -44,6 +68,22 @@ namespace UserAPI.Controllers
         [Route("api/GetListGameHistory")]
         [Authorize]
         public IActionResult GetListGameHistory()
+        {
+            var error = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                error = _GameService.GetListGameById(_User.Id);
+                return Ok(error);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpGet]
+        [Route("api/GetHistoryGameById")]
+        [Authorize]
+        public IActionResult GetHistoryGameById()
         {
             var error = new ErrorObject(Error.SUCCESS);
             try

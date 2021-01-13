@@ -97,7 +97,26 @@ namespace CoCaro.Service.Game
                 throw;
             }
         }
-        public ErrorObject GetGameByBoardId(int BoardId, int UserId)
+
+            public ErrorObject GetGameHistoryByGameId(int gameId)
+            {
+                var error = Error.Success();
+                try
+                {
+                    using (var db = new CoCaroContext())
+                    {
+                        var game = db.Games.Where(x => x.Id == gameId).Include(x => x.GameHistories).Include(x => x.Messages).ToList().FirstOrDefault();
+                        return error.SetData(game);
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+            }
+            public ErrorObject GetGameByBoardId(int BoardId, int UserId)
         {
             var error = Error.Success();
             try
