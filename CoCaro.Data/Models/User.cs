@@ -23,19 +23,21 @@ namespace CoCaro.Data.Models
         public string Username { get; set; }
         [StringLength(100)]
         public string Password { get; set; }
-        public int? GoogleId { get; set; }
-        public int? FacebookId { get; set; }
         public int? RoleId { get; set; }
         public int? Cup { get; set; }
         public double? RateWin { get; set; }
         public int? TotalGame { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime? CreateDate { get; set; }
         public bool? IsBlock { get; set; }
         [StringLength(200)]
         public string Email { get; set; }
         [StringLength(200)]
         public string FullName { get; set; }
+        [StringLength(50)]
+        public string FacebookId { get; set; }
+        [StringLength(50)]
+        public string GoogleId { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? CreateDated { get; set; }
 
         [InverseProperty(nameof(Game.UserId1Navigation))]
         public virtual ICollection<Game> GameUserId1Navigations { get; set; }

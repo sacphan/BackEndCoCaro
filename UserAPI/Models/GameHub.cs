@@ -13,6 +13,7 @@ namespace UserAPI.Models
     {
         private IChatService _ICharService;
         private IGameService _IGameService;
+        public static List<GameHistory> ListGameHistories = new List<GameHistory>();
         public GameHub(IChatService chatService, IGameService gameService)
         {
             _ICharService = chatService;
@@ -40,8 +41,8 @@ namespace UserAPI.Models
         }
         public async Task Play(GameHistory gameHistory)
         {
-            _IGameService.AddGameHistory(gameHistory);
-            await Clients.Others.SendAsync("play", gameHistory.Turn+1);
+            ListGameHistories.Add(gameHistory);
+            await Clients.Others.SendAsync("play", gameHistory);
         }
     }
 }

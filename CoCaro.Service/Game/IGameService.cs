@@ -14,5 +14,6 @@ namespace CoCaro.Service.Game
         ErrorObject GetListGameById(int UserId);
         CoCaro.Data.Models.Game GetGameByBoardId(int BoardId);
         ErrorObject AddGameHistory(GameHistory gameHistory);
+        List<GameHistory> getListGameHistory(int gameid);
     }
 }

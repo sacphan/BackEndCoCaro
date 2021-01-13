@@ -150,7 +150,7 @@ namespace AdminAPI.Controllers
             var error = new ErrorObject(Error.SUCCESS);
             try
             {
-                error = _GameService.GetListChatByGameId(gameId);
+                error = _GameService.GetListGameById(gameId);
                 return Ok(error);
             }
             catch (Exception)

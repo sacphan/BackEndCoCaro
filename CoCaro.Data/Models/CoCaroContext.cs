@@ -38,8 +38,6 @@ namespace CoCaro.Data.Models
 
             modelBuilder.Entity<Game>(entity =>
             {
-                entity.Property(e => e.CreateDate).HasDefaultValueSql("(getdate())");
-
                 entity.Property(e => e.Result).HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.Board)
@@ -60,8 +58,6 @@ namespace CoCaro.Data.Models
 
             modelBuilder.Entity<GameHistory>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.GameHistories)
                     .HasForeignKey(d => d.GameId)
@@ -83,7 +79,9 @@ namespace CoCaro.Data.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.CreateDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.FacebookId).IsUnicode(false);
+
+                entity.Property(e => e.GoogleId).IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

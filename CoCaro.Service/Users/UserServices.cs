@@ -95,7 +95,7 @@ namespace CoCaro.Services.Users
                     Cup = user.Cup,
                     RateWin = user.RateWin,
                     TotalGame = user.TotalGame,
-                    CreateDate = user.CreateDate == null ? string.Empty : user.CreateDate.Value.ToString("dd/MM/yyyy")
+                    CreateDate = user.CreateDated == null ? string.Empty : user.CreateDated.Value.ToString("dd/MM/yyyy")
 
                 };
                 userinfo.Rank = db.Users.Where(u=>u.Cup!=null).OrderBy(u => u.Cup).ToList().IndexOf(user) + 1;
