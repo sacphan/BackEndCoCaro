@@ -10,6 +10,7 @@ namespace CoCaro.Service.Chat
     public interface IChatService
     {
         ErrorObject LoadMessageByBoardId(int boardId);
-        ErrorObject SendMessage(int userId, int boardId, string message);
+    
+        ErrorObject SendMessage(int userId, int gameId, string message, int turn);
     }
 }

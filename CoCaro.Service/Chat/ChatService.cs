@@ -10,7 +10,7 @@ namespace CoCaro.Service.Chat
 {
     public class ChatService: IChatService
     {
-        public ErrorObject SendMessage(int userId,int gameId,string message)
+        public ErrorObject SendMessage(int userId,int gameId,string message,int turn)
         {
             var err = new ErrorObject(Error.SUCCESS);
             try
@@ -21,7 +21,8 @@ namespace CoCaro.Service.Chat
                     {
                         Message1 = message,
                         UserId = userId,
-                        GameId = gameId
+                        GameId = gameId,
+                        Turn = turn
                     };
                     db.Messages.Add(messageSend);
                  

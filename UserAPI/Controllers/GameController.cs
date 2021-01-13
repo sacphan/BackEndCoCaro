@@ -32,5 +32,20 @@ namespace UserAPI.Controllers
                 return (Ok(err.System(ex)));
             }
         }
+        [HttpPost]
+        [Route("api/wingame")]
+        public IActionResult GetGameByBoardId([FromBody] WinGame winGame)
+        {
+          
+            try
+            {
+                return  Ok(_GameService.WinGame(winGame.WinnerId,winGame.LoserId,winGame.GameId));
+           
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

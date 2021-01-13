@@ -24,11 +24,17 @@ namespace UserAPI.Models
         {
             if (!string.IsNullOrEmpty(message.Message1))
             {
-                _ICharService.SendMessage(message.UserId.Value, message.GameId.Value, message.Message1);
-                await Clients.Others.SendAsync("message", message.Message1);
+                _ICharService.SendMessage(message.UserId.Value, message.GameId.Value, message.Message1,message.Turn??0);
+                await Clients.Others.SendAsync("message"+ message.Turn, message);
             }
 
         }
+        
+        public async Task Game(Game game)
+        {   
+                await Clients.Others.SendAsync("game", game);          
+        }
+       
         public async Task Ready(string username)
         {           
                 //var idConnection = ChatHub.userOnline.FirstOrDefault(v => v.Value == username).Key;

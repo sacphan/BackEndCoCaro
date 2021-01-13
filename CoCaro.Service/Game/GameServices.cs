@@ -46,6 +46,32 @@ namespace CoCaro.Service.Game
                 throw ex;
             }
         }
+        public ErrorObject WinGame(int WinnerId,int LoserId,int GameId)
+        {
+            var error = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                using (var db = new CoCaroContext())
+                {
+                    var game = db.Games.FirstOrDefault(game => game.Id == GameId);
+                    game.Result = WinnerId;
+                    var userWinner = db.Users.FirstOrDefault(u => u.Id == WinnerId);
+                    userWinner.Cup = userWinner.Cup == null ? 0 : userWinner.Cup +10;
+                    userWinner.TotalGame = (userWinner.TotalGame ?? 0) + 1;
+                    var userLoser = db.Users.FirstOrDefault(u => u.Id == LoserId);
+                    userLoser.Cup = userLoser.Cup==null ? 0: userLoser.Cup-5;
+                    userLoser.TotalGame = (userWinner.TotalGame ?? 0) + 1;
+                    db.SaveChanges();
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return error;
+        }
         public ErrorObject GetListGameById(int UserId)
         {
             var error = Error.Success();
