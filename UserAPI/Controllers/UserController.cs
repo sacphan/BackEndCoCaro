@@ -112,11 +112,10 @@ namespace UserAPI.Controllers
             var error = new ErrorObject(Error.SUCCESS);
             try
             {
-                //var user = new User { FacebookId= login.FacebookId, Username = l}
-                //error = _IUserService.Login(user);
+                var user = new User { FacebookId = login.FacebookId, Username = login.Email ?? login.Phone, FullName = login.Name, Email = login.Email };
+                error = _IUserService.LoginFacebook(user);
                 if (error.Code == Error.SUCCESS.Code)
                 {
-
                     var token = _TokenService.CreateToken(error.GetData<User>());
                     return Ok(error.SetData(token));
                 }
@@ -137,8 +136,8 @@ namespace UserAPI.Controllers
             var error = new ErrorObject(Error.SUCCESS);
             try
             {
-                //error = _IUserService.CreateUser(user);
-                //if (error.Code == Error.SUCCESS.Code)
+                var user = new User { GoogleId = login.GoogleId, Username = login.Email ,Email=login.Email, FullName = login.Name };
+                error = _IUserService.LoginGoogle(user);
                 {
 
                     var token = _TokenService.CreateToken(error.GetData<User>());
