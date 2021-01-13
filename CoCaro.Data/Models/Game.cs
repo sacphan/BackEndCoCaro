@@ -21,11 +21,11 @@ namespace CoCaro.Data.Models
         public int Id { get; set; }
         public int? UserId1 { get; set; }
         public int? BoardId { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime? CreateDate { get; set; }
         public int? Result { get; set; }
         public int? CoinBet { get; set; }
         public int? UserId2 { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? CreateDated { get; set; }
 
         [ForeignKey(nameof(BoardId))]
         [InverseProperty("Games")]

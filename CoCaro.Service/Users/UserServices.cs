@@ -35,6 +35,52 @@ namespace CoCaro.Services.Users
                 throw ex;
             }
         }
+        public ErrorObject LoginFacebook(User user)
+        {
+            var error = Error.Success();
+            try
+            {
+                using var db = new CoCaroContext();
+                var user1 = db.Users.FirstOrDefault(x => x.FacebookId == user.FacebookId);
+                if (user1 == null)
+                {
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                    return error.SetData(user);
+                }
+                else 
+                {
+                    return error.SetData(user1);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public ErrorObject LoginGoogle(User user)
+        {
+            var error = Error.Success();
+            try
+            {
+                using var db = new CoCaroContext();
+                var user1 = db.Users.FirstOrDefault(x => x.GoogleId == user.GoogleId);
+                if (user1 == null)
+                {
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                    return error.SetData(user);
+                }
+                else
+                {
+                    return error.SetData(user1);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public ErrorObject LoginAdmin(string Username, string Password)
         {
             var error = Error.Success();
@@ -63,10 +109,10 @@ namespace CoCaro.Services.Users
             try
             {
                 using var db = new CoCaroContext();
-                var u = db.Users.FirstOrDefault(x => x.Username.ToLower() == user.Username.ToLower());
+                var u = db.Users.FirstOrDefault(x => x.Username.ToLower() == user.Username.ToLower() || x.Email == user.Email);
                 if (u != null)
                 {
-                    return error.Failed("Username đã tồn tại");
+                    return error.Failed("Tài khoản đã tồn tại");
                 }
                 else
                 {
@@ -95,7 +141,7 @@ namespace CoCaro.Services.Users
                     Cup = user.Cup,
                     RateWin = user.RateWin,
                     TotalGame = user.TotalGame,
-                    CreateDate = user.CreateDate == null ? string.Empty : user.CreateDate.Value.ToString("dd/MM/yyyy")
+                    CreateDate = user.CreateDated == null ? string.Empty : user.CreateDated.Value.ToString("dd/MM/yyyy")
 
                 };
                 userinfo.Rank = db.Users.Where(u=>u.Cup!=null).OrderBy(u => u.Cup).ToList().IndexOf(user) + 1;
