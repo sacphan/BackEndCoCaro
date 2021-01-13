@@ -12,7 +12,7 @@ namespace CoCaro.Service.Game
     public interface IGameService
     {
         ErrorObject GetListGameById(int UserId);
-        CoCaro.Data.Models.Game GetGameByBoardId(int BoardId);
+        ErrorObject GetGameByBoardId(int BoardId, int UserId);
         ErrorObject AddGameHistory(GameHistory gameHistory);
         ErrorObject GetListChatByGameId(int GameId);
         List<GameHistory> getListGameHistory(int gameid);

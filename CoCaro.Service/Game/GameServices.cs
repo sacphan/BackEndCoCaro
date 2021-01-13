@@ -19,25 +19,25 @@ namespace CoCaro.Service.Game
                 return gameHistories;
             }
         }
-        public ErrorObject AddGameHistory(GameHistory  gameHistory)
+        public ErrorObject AddGameHistory(GameHistory gameHistory)
         {
             var error = new ErrorObject(Error.SUCCESS);
             try
             {
                 using (var db = new CoCaroContext())
                 {
-                    var exit = db.GameHistories.FirstOrDefault(x => x.GameId == gameHistory.GameId && x.PlayerId == gameHistory.PlayerId && x.Turn == gameHistory.Turn && x.Postion==gameHistory.Postion);
+                    var exit = db.GameHistories.FirstOrDefault(x => x.GameId == gameHistory.GameId && x.PlayerId == gameHistory.PlayerId && x.Turn == gameHistory.Turn && x.Postion == gameHistory.Postion);
                     if (exit == null)
                     {
                         db.GameHistories.Add(gameHistory);
                         db.SaveChanges();
                         return error.SetData(gameHistory);
-                    }        
+                    }
                     else
                     {
                         return error.SetData(exit);
-                    }    
-                   
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -97,15 +97,51 @@ namespace CoCaro.Service.Game
                 throw;
             }
         }
-        public CoCaro.Data.Models.Game GetGameByBoardId(int BoardId)
+        public ErrorObject GetGameByBoardId(int BoardId, int UserId)
         {
-            CoCaro.Data.Models.Game game = null;
+            var error = Error.Success();
             try
             {
                 using (var db = new CoCaroContext())
                 {
-                    game = db.Games.Where(x => x.BoardId == BoardId &&x.Result==0).Include(x=>x.Board).Include(x=>x.UserId1Navigation).Include(x=>x.UserId2Navigation).Include(x => x.Messages).ToList().FirstOrDefault();
-                    
+                    var game = db.Games.Where(x => x.BoardId == BoardId && x.Result == 0).Include(x => x.Board).Include(x => x.UserId1Navigation).Include(x => x.UserId2Navigation).Include(x => x.Messages).ToList().FirstOrDefault();
+                    var b = db.Boards.FirstOrDefault(x => x.Id == game.BoardId);
+                    if (b.Password != null && b.Password != "")
+                    {
+                        if (game.UserId1 != UserId && game.UserId2 != UserId)
+                        {
+                            return error.Failed("Bạn đã đi lạc rồi");
+
+                        }
+                        else
+                        {
+                            return error.SetData(game);
+                        }
+                    }
+                    else
+                    {
+                        if (game.UserId1 != null && (game.UserId1 == UserId || game.UserId2 == UserId))
+                        {
+                            return error.SetData(game);
+                        }
+
+                        if (game.UserId2 == null && game.UserId1 != null)
+                        {
+                            game.UserId2 = UserId;
+                            b.Status = 2;
+                            db.SaveChanges();
+                        }
+                        else
+                        if (game.UserId1 == null && game.UserId2 != null)
+                        {
+                            game.UserId1 = UserId;
+                            b.Status = 2;
+                            db.SaveChanges();
+                        }
+                        return error.SetData(game);
+
+                    }
+
                 }
             }
             catch (Exception)
@@ -113,7 +149,7 @@ namespace CoCaro.Service.Game
 
                 throw;
             }
-            return game;
+
         }
         public ErrorObject GetListChatByGameId(int GameId)
         {
@@ -122,7 +158,7 @@ namespace CoCaro.Service.Game
             {
                 using (var db = new CoCaroContext())
                 {
-                    var games = db.Games.Where(x => x.Id == GameId).Include(x =>x.Messages).Include(x=>x.UserId1Navigation).Include(x=>x.UserId2Navigation).FirstOrDefault();
+                    var games = db.Games.Where(x => x.Id == GameId).Include(x => x.Messages).Include(x => x.UserId1Navigation).Include(x => x.UserId2Navigation).FirstOrDefault();
                     return error.SetData(games.Messages);
                 }
             }
