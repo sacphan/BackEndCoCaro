@@ -3,6 +3,7 @@
 using CoCaro.Service.Board;
 using CoCaro.Service.Caching;
 using CoCaro.Service.Chat;
+using CoCaro.Service.Game;
 using CoCaro.Service.Token;
 using CoCaro.Service.WorkContext;
 using CoCaro.Services.Users;
@@ -46,6 +47,8 @@ namespace CoCaro.Core
                         serviceCollection.AddSingleton<IBoardService, BoardService>();
                         serviceCollection.AddSingleton<IChatService, ChatService>();
                         serviceCollection.AddSingleton<IWorkContext, ApiWorkContext>();
+                        serviceCollection.AddSingleton<IGameService, GameServices>();
+                        
                         break;
                 }
             }

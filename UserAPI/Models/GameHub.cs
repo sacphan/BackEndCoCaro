@@ -1,5 +1,6 @@
 ﻿using CoCaro.Data.Models;
 using CoCaro.Service.Chat;
+using CoCaro.Service.Game;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,12 @@ namespace UserAPI.Models
     public class GameHub:Hub
     {
         private IChatService _ICharService;
-        public GameHub(IChatService chatService)
+        private IGameService _IGameService;
+        public GameHub(IChatService chatService, IGameService gameService)
         {
             _ICharService = chatService;
+            _IGameService = gameService;
+
         }
         public async Task Message(Message message)
         {
@@ -23,6 +27,21 @@ namespace UserAPI.Models
                 await Clients.Others.SendAsync("message", message.Message1);
             }
 
+        }
+        public async Task Ready(string username)
+        {           
+                //var idConnection = ChatHub.userOnline.FirstOrDefault(v => v.Value == username).Key;
+                await Clients.Others.SendAsync("ready", true);          
+        }
+        public async Task Start()
+        {
+            //var idConnection = ChatHub.userOnline.FirstOrDefault(v => v.Value == username).Key;
+            await Clients.Others.SendAsync("start", true);
+        }
+        public async Task Play(GameHistory gameHistory)
+        {
+            _IGameService.AddGameHistory(gameHistory);
+            await Clients.Others.SendAsync("play", gameHistory.Turn+1);
         }
     }
 }

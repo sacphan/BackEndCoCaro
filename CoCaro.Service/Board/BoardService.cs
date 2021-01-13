@@ -104,7 +104,7 @@ namespace CoCaro.Service.Board
                     var b = db.Boards.Where(b => b.Id == board.Id).FirstOrDefault();
                     if (b.Password == null || b.Password == "" || b.Password == board.Password)
                     {
-                        var game = db.Games.FirstOrDefault(x => x.BoardId == board.Id && x.Result == null);
+                        var game = db.Games.FirstOrDefault(x => x.BoardId == board.Id && x.Result == 0);
                         if (game != null)
                         {
                             game.UserId2 = UserId2;
