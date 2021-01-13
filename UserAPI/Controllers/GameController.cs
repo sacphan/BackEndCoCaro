@@ -24,12 +24,36 @@ namespace UserAPI.Controllers
             var err = new ErrorObject(Error.SUCCESS);
             try
             {
-                var game = _GameService.GetGameByBoardId(boardId);
-                return Ok(err.SetData(game));
+                err = _GameService.GetGameByBoardId(boardId, _User.Id);
+                if (err.Code == Error.SUCCESS.Code)
+                {                
+                        return Ok(err);                    
+                }
+            
+                else
+                {
+                    return Ok(err);
+                }
             }
             catch (Exception ex)
             {
                 return (Ok(err.System(ex)));
+            }
+        }
+        [HttpGet]
+        [Route("api/GetListGameHistory")]
+        [Authorize]
+        public IActionResult GetListGameHistory()
+        {
+            var error = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                error = _GameService.GetListGameById(_User.Id);
+                return Ok(error);
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

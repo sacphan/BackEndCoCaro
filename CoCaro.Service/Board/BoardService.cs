@@ -31,7 +31,7 @@ namespace CoCaro.Service.Board
                         db.SaveChanges();
                     }
                     err.SetData(board);
-                    var game = db.Games.FirstOrDefault(x => x.BoardId == board.Id &&  x.Result == null);
+                    var game = db.Games.FirstOrDefault(x => x.BoardId == board.Id &&  x.Result == 0);
                     if (game != null)
                     {
                         game.UserId1 = board.Owner;
@@ -107,6 +107,7 @@ namespace CoCaro.Service.Board
                         var game = db.Games.FirstOrDefault(x => x.BoardId == board.Id && x.Result == 0);
                         if (game != null)
                         {
+                            b.Status = 2;
                             game.UserId2 = UserId2;
                             db.SaveChanges();
                         }
@@ -158,11 +159,11 @@ namespace CoCaro.Service.Board
             {
                 using (var db = new CoCaroContext())
                 {
-                    var b = db.Boards.Where(b => b.Status == 1 && b.Password == null).FirstOrDefault(); 
+                    var b = db.Boards.Where(b => b.Status == 1 && (b.Password == null || b.Password== "")).FirstOrDefault(); 
                     if (b != null)
                     {
                         b.Status = 2;
-                        var game = db.Games.FirstOrDefault(x => x.BoardId == b.Id && x.Result == null);
+                        var game = db.Games.FirstOrDefault(x => x.BoardId == b.Id && x.Result == 0);
                         if (game != null)
                         {
                             game.UserId2 = UserId2;
