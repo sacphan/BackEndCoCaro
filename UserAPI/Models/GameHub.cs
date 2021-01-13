@@ -41,8 +41,8 @@ namespace UserAPI.Models
         }
         public async Task Play(GameHistory gameHistory)
         {
-            ListGameHistories.Add(gameHistory);
-            await Clients.Others.SendAsync("play", gameHistory);
+            _IGameService.AddGameHistory(gameHistory);
+            await Clients.Others.SendAsync("play"+gameHistory.Turn, gameHistory);
         }
     }
 }
