@@ -11,6 +11,14 @@ namespace CoCaro.Service.Game
 {
     public class GameServices : IGameService
     {
+        public List<GameHistory> getListGameHistory(int gameid)
+        {
+            using (var db = new CoCaroContext())
+            {
+                var gameHistories = db.GameHistories.Where(x => x.GameId == gameid).ToList();
+                return gameHistories;
+            }
+        }
         public ErrorObject AddGameHistory(GameHistory  gameHistory)
         {
             var error = new ErrorObject(Error.SUCCESS);
@@ -18,7 +26,7 @@ namespace CoCaro.Service.Game
             {
                 using (var db = new CoCaroContext())
                 {
-                    var exit = db.GameHistories.FirstOrDefault(x => x.GameId == gameHistory.GameId && x.PlayerId == gameHistory.PlayerId && x.Turn == gameHistory.Turn);
+                    var exit = db.GameHistories.FirstOrDefault(x => x.GameId == gameHistory.GameId && x.PlayerId == gameHistory.PlayerId && x.Turn == gameHistory.Turn && x.Postion==gameHistory.Postion);
                     if (exit == null)
                     {
                         db.GameHistories.Add(gameHistory);

@@ -58,8 +58,6 @@ namespace CoCaro.Data.Models
 
             modelBuilder.Entity<GameHistory>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.GameHistories)
                     .HasForeignKey(d => d.GameId)
