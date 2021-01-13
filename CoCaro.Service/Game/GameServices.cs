@@ -18,13 +18,18 @@ namespace CoCaro.Service.Game
             {
                 using (var db = new CoCaroContext())
                 {
-                    var exit = db.GameHistories.FirstOrDefault(x => x.Game == gameHistory.Game && x.PlayerId == gameHistory.PlayerId && x.Turn == gameHistory.Turn);
+                    var exit = db.GameHistories.FirstOrDefault(x => x.GameId == gameHistory.GameId && x.PlayerId == gameHistory.PlayerId && x.Turn == gameHistory.Turn);
                     if (exit == null)
                     {
                         db.GameHistories.Add(gameHistory);
                         db.SaveChanges();
-                    }                     
-                    return error.SetData(gameHistory);
+                        return error.SetData(gameHistory);
+                    }        
+                    else
+                    {
+                        return error.SetData(exit);
+                    }    
+                   
                 }
             }
             catch (Exception ex)
