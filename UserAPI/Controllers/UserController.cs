@@ -2,8 +2,11 @@
 using CoCaro.Models;
 using CoCaro.Service.Token;
 using CoCaro.Services.Users;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -16,10 +19,13 @@ namespace UserAPI.Controllers
     {
         private IUserService _IUserService;
         private ITokenService _TokenService;
-        public UserController(IUserService userService, ITokenService tokenService)
+        IHostingEnvironment env = null;
+
+        public UserController(IUserService userService, ITokenService tokenService, IHostingEnvironment env)
         {
             _IUserService = userService;
             _TokenService = tokenService;
+            this.env = env;
         }
         [Route("api/login")]
         [AllowAnonymous]
@@ -61,9 +67,10 @@ namespace UserAPI.Controllers
                 error = _IUserService.CreateUser(user);
                 if (error.Code == Error.SUCCESS.Code)
                 {
+                    sendMail(user.Email, error.GetData<User>().Id);
 
-                    var token = _TokenService.CreateToken(error.GetData<User>());
-                    return Ok(error.SetData(token));
+                    //var token = _TokenService.CreateToken(error.GetData<User>());
+                    return Ok(error.SetData("Truy cập mail để kích hoạt tài khoản"));
                 }
                 return Ok(error);
             }
@@ -133,6 +140,7 @@ namespace UserAPI.Controllers
         {
 
             //IActionResult response = Unauthorized();
+
             var error = new ErrorObject(Error.SUCCESS);
             try
             {
@@ -165,6 +173,36 @@ namespace UserAPI.Controllers
         public IActionResult GetInfoByUserName([FromBody] string username)
         {
             return Ok(_IUserService.GetInfoByUserName(username));
+        }
+        public IActionResult sendMail(string email, int userId)
+        {
+            MimeMessage message = new MimeMessage();
+
+            MailboxAddress from = new MailboxAddress("tranphihung312@gmail.com");
+            message.From.Add(from);
+
+            MailboxAddress to = new MailboxAddress(email);
+            message.To.Add(to);
+
+            message.Subject = "Confirm accounts in Co Caro";
+            BodyBuilder bodyBuilder = new BodyBuilder();
+            bodyBuilder.HtmlBody = "http://localhost:3000/confirmAccount/"+userId.ToString();
+            bodyBuilder.TextBody = "http://localhost:3000/confirmAccount/" + userId.ToString();
+            message.Body = bodyBuilder.ToMessageBody();
+            SmtpClient client = new SmtpClient();
+            client.Connect("smtp.gmail.com", 465, true);
+            client.Authenticate("tranphihung312@gmail.com", "Hungpro312@@");
+            client.Send(message);
+            client.Disconnect(true);
+            client.Dispose();
+            return Ok();
+        }
+        [Route("api/ConfirmAccount")]
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult ConfirmAccount([FromBody] int id)
+        {
+            return Ok(_IUserService.UnlockUser(id));
         }
     }
 

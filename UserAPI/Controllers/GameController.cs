@@ -27,9 +27,8 @@ namespace UserAPI.Controllers
                 err = _GameService.GetGameByBoardId(boardId, _User.Id);
                 if (err.Code == Error.SUCCESS.Code)
                 {                
-                        return Ok(err);                    
-                }
-            
+                    return Ok(err);                    
+                }           
                 else
                 {
                     return Ok(err);

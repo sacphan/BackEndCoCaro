@@ -21,6 +21,6 @@ namespace  CoCaro.Services.Users
         ErrorObject SeachUserByEmailOrName (string Keyword);
         ErrorObject LoginGoogle(User user);
         ErrorObject LoginFacebook(User user);
-
+        ErrorObject UnlockUser(int userId);
     }
 }

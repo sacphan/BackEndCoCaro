@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace CoCaro.Services.Users
 {
-   
+
     public class UserServices : IUserService
     {
         public ErrorObject Login(string Username, string Password)
@@ -28,7 +28,7 @@ namespace CoCaro.Services.Users
                 {
                     return Error.USER_INVALID;
                 }
-      
+
             }
             catch (Exception ex)
             {
@@ -48,7 +48,7 @@ namespace CoCaro.Services.Users
                     db.SaveChanges();
                     return error.SetData(user);
                 }
-                else 
+                else
                 {
                     return error.SetData(user1);
                 }
@@ -87,7 +87,7 @@ namespace CoCaro.Services.Users
             try
             {
                 using var db = new CoCaroContext();
-                var user = db.Users.FirstOrDefault(x =>x.RoleId == 1 && x.Username.ToLower().Equals(Username.ToLower()) && x.Password.Equals(Password));
+                var user = db.Users.FirstOrDefault(x => x.RoleId == 1 && x.Username.ToLower().Equals(Username.ToLower()) && x.Password.Equals(Password));
                 if (user != null)
                 {
                     return error.SetData(user);
@@ -116,6 +116,7 @@ namespace CoCaro.Services.Users
                 }
                 else
                 {
+                    //user.IsBlock = true;
                     db.Users.Add(user);
                     db.SaveChanges();
                     return error.SetData(user);
@@ -127,7 +128,7 @@ namespace CoCaro.Services.Users
                 throw ex;
             }
         }
-      
+
         public UserInfo GetInfoByUserName(string username)
         {
             UserInfo userinfo = null;
@@ -144,7 +145,7 @@ namespace CoCaro.Services.Users
                     CreateDate = user.CreateDated == null ? string.Empty : user.CreateDated.Value.ToString("dd/MM/yyyy")
 
                 };
-                userinfo.Rank = db.Users.Where(u=>u.Cup!=null).OrderBy(u => u.Cup).ToList().IndexOf(user) + 1;
+                userinfo.Rank = db.Users.Where(u => u.Cup != null).OrderBy(u => u.Cup).ToList().IndexOf(user) + 1;
             }
             catch (Exception ex)
             {
@@ -184,6 +185,22 @@ namespace CoCaro.Services.Users
                 {
                     users.IsBlock = true;
                 }
+                db.SaveChanges();
+                return error.SetData(users);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public ErrorObject UnlockUser(int userId)
+        {
+            var error = Error.Success();
+            try
+            {
+                using var db = new CoCaroContext();
+                var users = db.Users.FirstOrDefault(x => x.Id == userId);
+                users.IsBlock = false;
                 db.SaveChanges();
                 return error.SetData(users);
             }
