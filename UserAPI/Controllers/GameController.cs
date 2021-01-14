@@ -51,9 +51,8 @@ namespace UserAPI.Controllers
                 err = _GameService.GetGameHistoryByGameId(gameId);
                 if (err.Code == Error.SUCCESS.Code)
                 {                
-                        return Ok(err);                    
-                }
-            
+                    return Ok(err);                    
+                }           
                 else
                 {
                     return Ok(err);
