@@ -46,6 +46,32 @@ namespace CoCaro.Service.Game
                 throw ex;
             }
         }
+        public ErrorObject WinGame(int WinnerId,int LoserId,int GameId)
+        {
+            var error = new ErrorObject(Error.SUCCESS);
+            try
+            {
+                using (var db = new CoCaroContext())
+                {
+                    var game = db.Games.FirstOrDefault(game => game.Id == GameId);
+                    game.Result = WinnerId;
+                    var userWinner = db.Users.FirstOrDefault(u => u.Id == WinnerId);
+                    userWinner.Cup = userWinner.Cup == null ? 0 : userWinner.Cup +10;
+                    userWinner.TotalGame = (userWinner.TotalGame ?? 0) + 1;
+                    var userLoser = db.Users.FirstOrDefault(u => u.Id == LoserId);
+                    userLoser.Cup = userLoser.Cup==null ? 0: userLoser.Cup-5;
+                    userLoser.TotalGame = (userWinner.TotalGame ?? 0) + 1;
+                    db.SaveChanges();
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return error;
+        }
         public ErrorObject GetListGameById(int UserId)
         {
             var error = Error.Success();
@@ -71,7 +97,26 @@ namespace CoCaro.Service.Game
                 throw;
             }
         }
-        public ErrorObject GetGameByBoardId(int BoardId, int UserId)
+
+            public ErrorObject GetGameHistoryByGameId(int gameId)
+            {
+                var error = Error.Success();
+                try
+                {
+                    using (var db = new CoCaroContext())
+                    {
+                        var game = db.Games.Where(x => x.Id == gameId).Include(x => x.GameHistories).Include(x => x.Messages).ToList().FirstOrDefault();
+                        return error.SetData(game);
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+            }
+            public ErrorObject GetGameByBoardId(int BoardId, int UserId)
         {
             var error = Error.Success();
             try
