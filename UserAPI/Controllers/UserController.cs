@@ -8,6 +8,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace UserAPI.Controllers
@@ -21,6 +23,18 @@ namespace UserAPI.Controllers
             _IUserService = userService;
             _TokenService = tokenService;
         }
+        public  string EncryptMd5(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+            var md5 = new MD5CryptoServiceProvider();
+            byte[] valueArray = Encoding.ASCII.GetBytes(value);
+            valueArray = md5.ComputeHash(valueArray);
+            var sb = new StringBuilder();
+            for (int i = 0; i < valueArray.Length; i++)
+                sb.Append(valueArray[i].ToString("x2").ToLower());
+            return sb.ToString();
+        }
         [Route("api/login")]
         [AllowAnonymous]
         [HttpPost]
@@ -32,7 +46,7 @@ namespace UserAPI.Controllers
             try
             {
 
-                var result = _IUserService.Login(user.Username, user.Password);
+                var result = _IUserService.Login(user.Username,EncryptMd5(user.Password));
                 if (result.Code == Error.SUCCESS.Code)
                 {
                     var token = _TokenService.CreateToken(result.GetData<User>());
@@ -58,6 +72,7 @@ namespace UserAPI.Controllers
             var error = new ErrorObject(Error.SUCCESS);
             try
             {
+                user.Password = EncryptMd5(user.Password);
                 error = _IUserService.CreateUser(user);
                 if (error.Code == Error.SUCCESS.Code)
                 {
